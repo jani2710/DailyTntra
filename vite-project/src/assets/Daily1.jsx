@@ -67,7 +67,7 @@ const Daily1 = () => {
             <td>
               <input
                 type="number"
-                placeholder="Aghhe"
+                placeholder="Age"
                 value={newRow.age}
                 onChange={(e) => handleInputChange('age', e.target.value)}
               />
@@ -75,7 +75,7 @@ const Daily1 = () => {
             <td>
               <input
                 type="text"
-                placeholder="Adss"
+                placeholder="Location"
                 value={newRow.location}
                 onChange={(e) => handleInputChange('location', e.target.value)}
               />
@@ -83,7 +83,7 @@ const Daily1 = () => {
             <td>
               <input
                 type="number"
-                placeholder="Contact No"
+                placeholder="Contact No."
                 value={newRow.Contact}
                 onChange={(e) => handleInputChange('Contact', e.target.value)}
               />
