@@ -26,6 +26,9 @@ const Daily1 = () => {
 
   return (
     <div className="App">
+      <td>
+              <button onClick={handleAddRow}>{buttonText}</button>
+            </td>
       <table>
         <thead>
           <tr>
@@ -38,6 +41,7 @@ const Daily1 = () => {
 
           </tr>
         </thead>
+        
         <tbody>
           {data.map((row) => (
             <tr key={row.id}>
@@ -49,6 +53,8 @@ const Daily1 = () => {
             </tr>
           ))}
           <tr>
+          
+          
             <td></td>
             <td>
               <input
@@ -82,9 +88,7 @@ const Daily1 = () => {
                 onChange={(e) => handleInputChange('Contact', e.target.value)}
               />
             </td>
-            <td>
-              <button onClick={handleAddRow}>{buttonText}</button>
-            </td>
+           
           </tr>
         </tbody>
       </table>
