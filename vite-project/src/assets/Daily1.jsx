@@ -3,7 +3,7 @@ import { useState } from 'react'
 const Daily1 = () => {
   const initialData = [];
 
-  const handleInputChange = (field, value) => {
+  const InputChange = (field, value) => {
     setNewRow({...newRow, [field]: value });
   };
 
@@ -13,7 +13,7 @@ const Daily1 = () => {
   const [editing, setEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
-  const handleAddRow = () => {
+  const AddRow = () => {
     if (newRow.name || newRow.age || newRow.location || newRow.Contact) {
       setData([...data, {...newRow, id: data.length +1 }]); 
       setNewRow({ id: '', name: '', age: '', location:'', Contact:'' });
@@ -24,14 +24,15 @@ const Daily1 = () => {
     }
   };
 
-  const handleEditRow = (id) => {
+  const EditRow = (id) => {
     setEditing(true);
     setEditingId(id);
     const row = data.find((row) => row.id === id);
-    setNewRow(row);
+    setNewRow(row); 
+
   };
 
-  const handleUpdateRow = () => {
+  const UpdateRow = () => {
     if (newRow.name || newRow.age || newRow.location || newRow.Contact) {
       const updatedData = data.map((row) => {
         if (row.id === editingId) {
@@ -46,13 +47,13 @@ const Daily1 = () => {
     }
   };
 
-  const handleDeleteRow = (id) => {
+  const DeleteRow = (id) => {
     const updatedData = data.filter((row) => row.id!== id);
     setData(updatedData);
   };
 
   return (
-    <div className="App">
+    <div>
       <table>
         <thead>
           <tr>
@@ -61,7 +62,7 @@ const Daily1 = () => {
             <th>Age</th>
             <th>Location</th>
             <th>Contact No.</th>
-            <th>Actions</th>
+            
           </tr>
         </thead>
         <tbody>
@@ -73,8 +74,8 @@ const Daily1 = () => {
               <td>{row.location}</td>
               <td>{row.Contact}</td>
               <td>
-                <button onClick={() => handleEditRow(row.id)}>Edit</button>
-                <button onClick={() => handleDeleteRow(row.id)}>Delete</button>
+                <button onClick={() => EditRow(row.id)}>Edit</button>
+                <button onClick={() => DeleteRow(row.id)}>Delete</button>
               </td>
             </tr>
           ))}
@@ -85,7 +86,7 @@ const Daily1 = () => {
                 type="text"
                 placeholder="Name"
                 value={newRow.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
+                onChange={(e) => InputChange('name', e.target.value)}
               />
             </td>
             <td>
@@ -93,7 +94,7 @@ const Daily1 = () => {
                 type="number"
                 placeholder="Age"
                 value={newRow.age}
-                onChange={(e) => handleInputChange('age', e.target.value)}
+                onChange={(e) => InputChange('age', e.target.value)}
               />
             </td>
             <td>
@@ -101,7 +102,7 @@ const Daily1 = () => {
                 type="text"
                 placeholder="Location"
                 value={newRow.location}
-                onChange={(e) => handleInputChange('location', e.target.value)}
+                onChange={(e) => InputChange('location', e.target.value)}
               />
             </td>
             <td>
@@ -109,14 +110,14 @@ const Daily1 = () => {
                 type="number"
                 placeholder="Contact No."
                 value={newRow.Contact}
-                onChange={(e) => handleInputChange('Contact', e.target.value)}
+                onChange={(e) => InputChange('Contact', e.target.value)}
               />
             </td>
             <td>
               {editing? (
-                <button onClick={handleUpdateRow}>Update</button>
+                <button onClick={UpdateRow}>Update</button>
               ) : (
-                <button onClick={handleAddRow}>{buttonText}</button>
+                <button onClick={AddRow}>{buttonText}</button>
               )}
             </td>
           </tr>
