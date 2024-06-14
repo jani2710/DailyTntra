@@ -12,15 +12,18 @@ const Daily1 = () => {
   const [buttonText, setButtonText] = useState('Add');
   const [editing, setEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [originalRow, setOriginalRow] = useState({});
 
   const AddRow = () => {
-    if (newRow.name || newRow.age || newRow.location || newRow.Contact) {
+    if (newRow.name && newRow.age && newRow.location && newRow.Contact) {
       setData([...data, {...newRow, id: data.length +1 }]); 
       setNewRow({ id: '', name: '', age: '', location:'', Contact:'' });
       setButtonText('Added!');
       setTimeout(() => {
         setButtonText('Add Row');
       }, 1000);
+    } else {
+      alert("Please fill all fields");
     }
   };
 
@@ -29,11 +32,11 @@ const Daily1 = () => {
     setEditingId(id);
     const row = data.find((row) => row.id === id);
     setNewRow(row); 
-
+    setOriginalRow(row);
   };
 
   const UpdateRow = () => {
-    if (newRow.name || newRow.age || newRow.location || newRow.Contact) {
+    if (newRow.name && newRow.age && newRow.location && newRow.Contact) {
       const updatedData = data.map((row) => {
         if (row.id === editingId) {
           return newRow;
@@ -44,12 +47,28 @@ const Daily1 = () => {
       setNewRow({ id: '', name: '', age: '', location:'', Contact:'' });
       setEditing(false);
       setButtonText('Add Row');
+    } else {
+      alert("Please fill all fields");
     }
   };
 
-  const DeleteRow = (id) => {
+  const DiscardChanges = () => {
+    setNewRow(originalRow);
+    setEditing(false);
+  };
+   
+     const DeleteRow = (id) => {
     const updatedData = data.filter((row) => row.id!== id);
     setData(updatedData);
+  };
+
+
+
+
+       const DuplicateRow = (id) => {
+  const rowToDuplicate = data.find((row) => row.id === id);
+       const duplicatedRow = {...rowToDuplicate, id: data.length + 1};
+      setData([...data, duplicatedRow]);
   };
 
   return (
@@ -76,6 +95,7 @@ const Daily1 = () => {
               <td>
                 <button onClick={() => EditRow(row.id)}>Edit</button>
                 <button onClick={() => DeleteRow(row.id)}>Delete</button>
+                <button onClick={() => DuplicateRow(row.id)}>Duplicate</button>
               </td>
             </tr>
           ))}
@@ -87,6 +107,7 @@ const Daily1 = () => {
                 placeholder="Name"
                 value={newRow.name}
                 onChange={(e) => InputChange('name', e.target.value)}
+                required
               />
             </td>
             <td>
@@ -95,6 +116,7 @@ const Daily1 = () => {
                 placeholder="Age"
                 value={newRow.age}
                 onChange={(e) => InputChange('age', e.target.value)}
+                required
               />
             </td>
             <td>
@@ -103,6 +125,7 @@ const Daily1 = () => {
                 placeholder="Location"
                 value={newRow.location}
                 onChange={(e) => InputChange('location', e.target.value)}
+                required
               />
             </td>
             <td>
@@ -111,11 +134,15 @@ const Daily1 = () => {
                 placeholder="Contact No."
                 value={newRow.Contact}
                 onChange={(e) => InputChange('Contact', e.target.value)}
+                required
               />
             </td>
             <td>
               {editing? (
-                <button onClick={UpdateRow}>Update</button>
+                <div>
+                  <button onClick={UpdateRow}>Update</button>
+                  <button onClick={DiscardChanges}>Discard Changes</button>
+                </div>
               ) : (
                 <button onClick={AddRow}>{buttonText}</button>
               )}
@@ -127,4 +154,4 @@ const Daily1 = () => {
   );
 };
 
-export default Daily1;
+export default Daily1
