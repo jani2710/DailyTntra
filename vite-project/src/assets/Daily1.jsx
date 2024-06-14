@@ -53,11 +53,11 @@ const Daily1 = () => {
   };
 
   const DiscardChanges = () => {
-    setNewRow(originalRow);
+ setNewRow(originalRow);
     setEditing(false);
   };
    
-     const DeleteRow = (id) => {
+       const DeleteRow = (id) => {
     const updatedData = data.filter((row) => row.id!== id);
     setData(updatedData);
   };
