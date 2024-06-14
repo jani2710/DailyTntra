@@ -11,7 +11,8 @@ function App() {
   return (
     <>
      <Daily1/>
-     <Daily2/>
+     
+   
     </>
   )
 }

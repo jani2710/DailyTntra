@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
 const Daily1 = () => {
   const initialData = [];
@@ -15,7 +15,11 @@ const Daily1 = () => {
   const [originalRow, setOriginalRow] = useState({});
 
   const AddRow = () => {
-    if (newRow.name && newRow.age && newRow.location && newRow.Contact) {
+    const existingName = data.find((row) => row.name === newRow.name);
+    if (existingName) {
+      alert("Name already exists!");
+    }
+    else if (newRow.name && newRow.age && newRow.location && newRow.Contact) {
       setData([...data, {...newRow, id: data.length +1 }]); 
       setNewRow({ id: '', name: '', age: '', location:'', Contact:'' });
       setButtonText('Added!');
@@ -53,24 +57,25 @@ const Daily1 = () => {
   };
 
   const DiscardChanges = () => {
- setNewRow(originalRow);
+    setNewRow(originalRow);
     setEditing(false);
   };
-   
-       const DeleteRow = (id) => {
+
+  const DeleteRow = (id) => {
     const updatedData = data.filter((row) => row.id!== id);
     setData(updatedData);
   };
 
-
-
-
-       const DuplicateRow = (id) => {
-  const rowToDuplicate = data.find((row) => row.id === id);
-       const duplicatedRow = {...rowToDuplicate, id: data.length + 1};
+  const DuplicateRow = (id) => {
+    const rowToDuplicate = data.find((row) => row.id === id);
+    const duplicatedRow = {...rowToDuplicate, id: data.length + 1};
+    const existingDuplicate = data.find((row) => row.name === duplicatedRow.name && row.id!== id);
+    if (!existingDuplicate) {
       setData([...data, duplicatedRow]);
+    } else {
+      alert("Duplicate already exists!");
+    }
   };
-
   return (
     <div>
       <table>
@@ -154,4 +159,4 @@ const Daily1 = () => {
   );
 };
 
-export default Daily1
+export default Daily1;
