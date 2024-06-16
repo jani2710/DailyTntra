@@ -31,6 +31,20 @@ const Daily1 = () => {
     }
   };
 
+
+  const InputChanger = (field, value) => {
+    if (field === 'Contact' && value.length > 10) {
+      setError('Please enter a valid 10-digit contact number.');
+    } else if (field === 'Contact No.' && value.length <= 10) {
+      setError();
+    }
+    setNewRow({...newRow, [field]: value });
+  };
+
+
+
+
+
   const EditRow = (id) => {
     setEditing(true);
     setEditingId(id);
@@ -39,7 +53,7 @@ const Daily1 = () => {
     setOriginalRow(row);
   };
 
-  const UpdateRow = () => {
+  const UpdateRow = () => {s
     if (newRow.name && newRow.age && newRow.location && newRow.Contact) {
       const updatedData = data.map((row) => {
         if (row.id === editingId) {
@@ -76,6 +90,8 @@ const Daily1 = () => {
       alert("Duplicate already exists!");
     }
   };
+
+  
   return (
     <div>
       <table>
@@ -138,7 +154,11 @@ const Daily1 = () => {
                 type="number"
                 placeholder="Contact No."
                 value={newRow.Contact}
-                onChange={(e) => InputChange('Contact', e.target.value)}
+                
+
+                
+   
+                onChange={(e) => InputChanger('Contact', e.target.value)}
                 required
               />
             </td>
