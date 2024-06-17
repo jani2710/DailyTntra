@@ -12,6 +12,8 @@ function App() {
     <>
      
      <Daily1/>
+     
+   
    
     </>
   )

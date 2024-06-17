@@ -1,11 +1,9 @@
 import React from 'react';
 
-const Daily2 = () => {
+export default function Daily2() {
   return (
     <div>
       
     </div>
   );
 }
-
-export default Daily2;

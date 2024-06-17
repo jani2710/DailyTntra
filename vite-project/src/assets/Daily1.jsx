@@ -13,6 +13,7 @@ const Daily1 = () => {
   const [editing, setEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [originalRow, setOriginalRow] = useState({});
+  const [contactError, setContactError] = useState('');
 
   const AddRow = () => {
     const existingName = data.find((row) => row.name === newRow.name);
@@ -33,18 +34,50 @@ const Daily1 = () => {
 
 
   const InputChanger = (field, value) => {
-    if (field === 'Contact' && value.length > 10) {
-      setError('Please enter a valid 10-digit contact number.');
-    } else if (field === 'Contact No.' && value.length <= 10) {
-      setError();
+    if (field === 'Contact') {
+      let isValid = true;
+      let hasPlusSign = false;
+      for (let i = 0; i < value.length; i++) {
+        if (i === 0 && value[i] === '+') {
+          hasPlusSign = true;
+          continue;
+        }
+        if (!/\d/.test(value[i])) {
+          isValid = false;
+          break;
+        }
+        if (hasPlusSign && value[i] === '+') {
+          isValid = false;
+          break;
+        }
+      }
+      if (!isValid) {
+        setContactError('Only "+" sign allowed for STD');
+        return;
+      }
+      if (value.startsWith('+91')) {
+        if (value.length > 13) {
+          setContactError('Only 13 digits allowed!!');
+          return;
+        }
+        setContactError('');
+      }
+      if (value.length > 10 && !value.startsWith('+91')) {
+        if (value.length > 13) {
+          setContactError('');
+        } else {
+          setContactError('More than 10 digits entered. Please ensure it is valid.');
+        }
+      } else {
+        setContactError('');
+      }
+      if (value.length === 0) {
+        setNewRow({...newRow, [field]: '' });
+      } else {
+        setNewRow({...newRow, [field]: value });
+      }
     }
-    setNewRow({...newRow, [field]: value });
   };
-
-
-
-
-
   const EditRow = (id) => {
     setEditing(true);
     setEditingId(id);
@@ -53,7 +86,7 @@ const Daily1 = () => {
     setOriginalRow(row);
   };
 
-  const UpdateRow = () => {s
+  const UpdateRow = () => {
     if (newRow.name && newRow.age && newRow.location && newRow.Contact) {
       const updatedData = data.map((row) => {
         if (row.id === editingId) {
@@ -103,6 +136,7 @@ const Daily1 = () => {
             <th>Location</th>
             <th>Contact No.</th>
             
+            
           </tr>
         </thead>
         <tbody>
@@ -113,10 +147,13 @@ const Daily1 = () => {
               <td>{row.age}</td>
               <td>{row.location}</td>
               <td>{row.Contact}</td>
+              
+              
               <td>
                 <button onClick={() => EditRow(row.id)}>Edit</button>
                 <button onClick={() => DeleteRow(row.id)}>Delete</button>
                 <button onClick={() => DuplicateRow(row.id)}>Duplicate</button>
+                
               </td>
             </tr>
           ))}
@@ -150,18 +187,25 @@ const Daily1 = () => {
               />
             </td>
             <td>
-              <input
-                type="number"
-                placeholder="Contact No."
-                value={newRow.Contact}
-                
+  <input
+    type=""
+    
+    placeholder="Contact No."
+    value={newRow.Contact}
+    onChange={(e) => InputChanger('Contact', e.target.value)}
+    required
+  />
+  {contactError && (
+    <p style={{ color: 'red', fontSize: '12px' }}>
+      {contactError}
+    </p>
+  )}
+</td>
+           
+            
+              
 
-                
-   
-                onChange={(e) => InputChanger('Contact', e.target.value)}
-                required
-              />
-            </td>
+            
             <td>
               {editing? (
                 <div>
