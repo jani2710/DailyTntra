@@ -3,26 +3,24 @@ import { useState } from 'react';
 const Daily1 = () => {
   const initialData = [];
 
-  const InputChange = (field, value) => {
-    setNewRow({...newRow, [field]: value });
-  };
 
   const [data, setData] = useState(initialData);
-  const [newRow, setNewRow] = useState({  name: '', age: '', location:'', Contact:'' });
+  const [newRow, setNewRow] = useState({  name: '', age: '', location:'', contact:'' });
   const [buttonText, setButtonText] = useState('Add');
   const [editing, setEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [originalRow, setOriginalRow] = useState({});
   const [contactError, setContactError] = useState('');
+  const [ageError, setAgeError] = useState('');
 
   const AddRow = () => {
     const existingName = data.find((row) => row.name === newRow.name);
     if (existingName) {
       alert("Name already exists!");
     }
-    else if (newRow.name && newRow.age && newRow.location && newRow.Contact) {
+    else if (newRow.name && newRow.age && newRow.location && newRow.contact) {
       setData([...data, {...newRow, id: data.length +1 }]); 
-      setNewRow({ id: '', name: '', age: '', location:'', Contact:'' });
+      setNewRow({ id: '', name: '', age: '', location:'', contact:'' });
       setButtonText('Added!');
       setTimeout(() => {
         setButtonText('Add Row');
@@ -33,51 +31,51 @@ const Daily1 = () => {
   };
 
 
-  const InputChanger = (field, value) => {
-    if (field === 'Contact') {
-      let isValid = true;
-      let hasPlusSign = false;
-      for (let i = 0; i < value.length; i++) {
-        if (i === 0 && value[i] === '+') {
-          hasPlusSign = true;
-          continue;
-        }
-        if (!/\d/.test(value[i])) {
-          isValid = false;
-          break;
-        }
-        if (hasPlusSign && value[i] === '+') {
-          isValid = false;
-          break;
-        }
+  const InputChange = (field, value) => {
+    setNewRow({...newRow, [field]: value });
+
+    if(field==="age"){
+      
+      if(value.length>2){
+        setAgeError("Age must be in 2 digits")
+        
+      }else{
+        setAgeError("")
       }
-      if (!isValid) {
-        setContactError('Only "+" sign allowed for STD');
-        return;
-      }
-      if (value.startsWith('+91')) {
-        if (value.length > 13) {
-          setContactError('Only 13 digits allowed!!');
-          return;
-        }
-        setContactError('');
-      }
-      if (value.length > 10 && !value.startsWith('+91')) {
-        if (value.length > 13) {
-          setContactError('');
+    }
+  
+    if (field === "contact") {
+      if (value) {
+        const plusCount = value.split('+',(isNaN(value))).length-1; 
+        if (plusCount > 1) {
+          setContactError("Invalid Number");
         } else {
-          setContactError('More than 10 digits entered. Please ensure it is valid.');
+          if (value.charAt(0) === '+') {
+            if (value.length > 13 || isNaN(value)) {
+              setContactError("Invalid Number");
+            } else {
+              setContactError("");
+            }
+            
+          } else {
+            if (isNaN(value)) {
+              setContactError("Invalid Number.");
+            } else {
+              if (value.length > 10) {
+                setContactError("Number should be 10 digits.");
+              } else {
+                setContactError("");
+              }
+            }
+          }
         }
       } else {
-        setContactError('');
-      }
-      if (value.length === 0) {
-        setNewRow({...newRow, [field]: '' });
-      } else {
-        setNewRow({...newRow, [field]: value });
+        setContactError("");
       }
     }
   };
+
+  
   const EditRow = (id) => {
     setEditing(true);
     setEditingId(id);
@@ -87,7 +85,7 @@ const Daily1 = () => {
   };
 
   const UpdateRow = () => {
-    if (newRow.name && newRow.age && newRow.location && newRow.Contact) {
+    if (newRow.name && newRow.age && newRow.location && newRow.contact) {
       const updatedData = data.map((row) => {
         if (row.id === editingId) {
           return newRow;
@@ -95,7 +93,7 @@ const Daily1 = () => {
         return row;
       });
       setData(updatedData);
-      setNewRow({ id: '', name: '', age: '', location:'', Contact:'' });
+      setNewRow({ id: '', name: '', age: '', location:'', contact:'' });
       setEditing(false);
       setButtonText('Add Row');
     } else {
@@ -133,7 +131,7 @@ const Daily1 = () => {
             <th>Sr.no</th>
             <th>Name</th>
             <th>Age</th>
-            <th>Location</th>
+            <th>Location</th> 
             <th>Contact No.</th>
             
             
@@ -146,7 +144,7 @@ const Daily1 = () => {
               <td>{row.name}</td>
               <td>{row.age}</td>
               <td>{row.location}</td>
-              <td>{row.Contact}</td>
+              <td>{row.contact}</td>
               
               
               <td>
@@ -176,6 +174,11 @@ const Daily1 = () => {
                 onChange={(e) => InputChange('age', e.target.value)}
                 required
               />
+               {ageError && (
+    <p style={{ color: 'red', fontSize: '12px' }}>
+      {ageError}
+    </p>
+               )}
             </td>
             <td>
               <input
@@ -191,8 +194,8 @@ const Daily1 = () => {
     type=""
     
     placeholder="Contact No."
-    value={newRow.Contact}
-    onChange={(e) => InputChanger('Contact', e.target.value)}
+    value={newRow.contact}
+    onChange={(e) => InputChange('contact', e.target.value)}
     required
   />
   {contactError && (
