@@ -12,6 +12,8 @@ const Daily1 = () => {
   const [originalRow, setOriginalRow] = useState({});
   const [contactError, setContactError] = useState('');
   const [ageError, setAgeError] = useState('');
+  const [nameError, setNameError] = useState('');
+
 
   const AddRow = () => {
     const existingName = data.find((row) => row.name === newRow.name);
@@ -34,15 +36,37 @@ const Daily1 = () => {
   const InputChange = (field, value) => {
     setNewRow({...newRow, [field]: value });
 
-    if(field==="age"){
-      
-      if(value.length>2){
-        setAgeError("Age must be in 2 digits")
+    if (field === "age") {
+      if (value.length > 2) {
+        setAgeError("Age must be in 2 digits");
+      } else if (value < 18) {
+        setAgeError("Please enter age above 18");
         
-      }else{
-        setAgeError("")
+      }
+       else if (isNaN(value)){
+        setAgeError("Please enter number")
+      }
+       else {
+        setAgeError("");
+        
       }
     }
+    if (field === "name") {
+      if (value.length > 2) {
+        setAgeError("Age must be in 2 digits");
+      } else if (value < 18) {
+        setAgeError("Please enter age above 18");
+      } else if(isNaN(value)){
+        setAgeError("Please enter number");
+      }
+      
+      
+      else {
+        setAgeError("");
+        
+      }
+    }
+    
   
     if (field === "contact") {
       if (value) {
@@ -165,10 +189,15 @@ const Daily1 = () => {
                 onChange={(e) => InputChange('name', e.target.value)}
                 required
               />
+              {nameError && (
+    <p style={{ color: 'red', fontSize: '12px' }}>
+      {nameError}
+    </p>
+              )}
             </td>
             <td>
               <input
-                type="number"
+                type=""
                 placeholder="Age"
                 value={newRow.age}
                 onChange={(e) => InputChange('age', e.target.value)}
