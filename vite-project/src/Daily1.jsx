@@ -75,10 +75,7 @@ const Daily1 = () => {
         }
       }
     
-      console.log(hasNumber);
-      console.log(hasSpecialChar);
-      console.log(startsWithSpace);
-      console.log(endsWithSpace);
+     
     
       if (hasNumber || hasSpecialChar || startsWithSpace || endsWithSpace) {
         if (hasNumber) {
