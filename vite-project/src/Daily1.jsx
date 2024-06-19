@@ -38,18 +38,16 @@ const Daily1 = () => {
     setNewRow({...newRow, [field]: value });
 
     if (field === "age") {
-      if (value.length > 2) {
+      if (value === "") {
+        setAgeError("");
+      } else if (value.length > 2) {
         setAgeError("Age must be in 2 digits");
       } else if (value < 18) {
         setAgeError("Please enter age above 18");
-        
-      }
-       else if (isNaN(value)){
-        setAgeError("Please enter number")
-      }
-       else {
+      } else if (isNaN(value)){
+        setAgeError("Please enter a number");
+      } else {
         setAgeError("");
-        
       }
     }
     if (field === "name" && value!== "") {
