@@ -13,6 +13,7 @@ const Daily1 = () => {
   const [contactError, setContactError] = useState('');
   const [ageError, setAgeError] = useState('');
   const [nameError, setNameError] = useState('');
+  const [locationError, setLocationError] = useState('');
 
 
   const AddRow = () => {
@@ -52,21 +53,45 @@ const Daily1 = () => {
       }
     }
     if (field === "name") {
-      if (value.length > 2) {
-        setAgeError("Age must be in 2 digits");
-      } else if (value < 18) {
-        setAgeError("Please enter age above 18");
-      } else if(isNaN(value)){
-        setAgeError("Please enter number");
-      }
+      let hasNumber = false;
+      let hasSpecialChar = false;
+      let hasSpace = false;
+      const specialChars = ["!", "@", "#", "$", "%", "&", "*", "(", ")", "-", "+"];
       
+      for (let i = 0; i < value.length; i++) {
+        if (value.charCodeAt(i) >= 48 && value.charCodeAt(i) <= 57) {
+          hasNumber = true;
+          break;
+        }
+        if (specialChars.includes(value[i])) {
+          hasSpecialChar = true;
+          break;
+        }
+        if (value[i] === " ") {
+          hasSpace = true;
+        } else{
+          setNameError("");
+        }
+      } 
       
-      else {
-        setAgeError("");
-        
+      console.log(hasNumber);
+      console.log(hasSpecialChar);
+      console.log(hasSpace);
+      
+      if (hasNumber || hasSpecialChar || hasSpace) {
+        if (hasNumber && hasSpecialChar && hasSpace) {
+          
+        } else if (hasNumber) {
+          setNameError("No numbers allowed please!!");
+        } else if (hasSpecialChar) {
+          setNameError("No special characters allowed please!!");
+        } else {
+          setNameError("No spaces allowed!!!");
+        }
+      } else {
+        setNameError("");
       }
     }
-    
   
     if (field === "contact") {
       if (value) {
@@ -98,6 +123,7 @@ const Daily1 = () => {
       }
     }
   };
+  
 
   
   const EditRow = (id) => {
