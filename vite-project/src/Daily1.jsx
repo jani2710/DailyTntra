@@ -52,47 +52,59 @@ const Daily1 = () => {
         
       }
     }
-    if (field === "name") {
+    if (field === "name" && value !== "") {
       let hasNumber = false;
       let hasSpecialChar = false;
-      let hasSpace = false;
+      let spaceCount = 0;
+      let startsWithSpace = false;
+      let endsWithSpace = false;
+    
       const specialChars = ["!", "@", "#", "$", "%", "&", "*", "(", ")", "-", "+"];
-      
+    
       for (let i = 0; i < value.length; i++) {
         if (value.charCodeAt(i) >= 48 && value.charCodeAt(i) <= 57) {
           hasNumber = true;
-          break;
         }
         if (specialChars.includes(value[i])) {
           hasSpecialChar = true;
-          break;
         }
         if (value[i] === " ") {
-          hasSpace = true;
-        } else{
-          setNameError("");
+          spaceCount++;
+          if (i === 0) {
+            startsWithSpace = true;
+          }
+          if (i === value.length - 1) {
+            endsWithSpace = true;
+          }
         }
-      } 
-      
+      }
+    
       console.log(hasNumber);
       console.log(hasSpecialChar);
-      console.log(hasSpace);
-      
-      if (hasNumber || hasSpecialChar || hasSpace) {
-        if (hasNumber && hasSpecialChar && hasSpace) {
-          
-        } else if (hasNumber) {
+      console.log(spaceCount);
+      console.log(startsWithSpace);
+      console.log(endsWithSpace);
+    
+      if (hasNumber || hasSpecialChar || spaceCount > 1 || startsWithSpace || endsWithSpace) {
+        if (hasNumber) {
           setNameError("No numbers allowed please!!");
         } else if (hasSpecialChar) {
           setNameError("No special characters allowed please!!");
+        } else if (spaceCount > 1) {
+          setNameError("Only one space is allowed!!!");
+        } else if (startsWithSpace) {
+          setNameError("Name cannot start with a space!!");
         } else {
-          setNameError("No spaces allowed!!!");
+          setNameError("Name cannot end with a space!!");
         }
+      } else if (spaceCount === 1) {
+        setNameError("");
       } else {
         setNameError("");
       }
+    } else {
+      setNameError(""); // if field is empty or not "name", don't show an error
     }
-  
     if (field === "contact") {
       if (value) {
         const plusCount = value.split('+',(isNaN(value))).length-1; 
